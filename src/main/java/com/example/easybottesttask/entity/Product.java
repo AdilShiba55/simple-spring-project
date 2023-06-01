@@ -1,26 +1,26 @@
 package com.example.easybottesttask.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "products")
-public class Product extends BaseEntity {
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_id_seq")
+    @SequenceGenerator(name = "product_id_seq", allocationSize = 1, initialValue = 1000)
+    private Long id;
 
     @Column(name = "name")
     private String name;
-
-    @OneToOne
-    @JoinColumn(name = "product_type_id")
-    private ProductType productType;
 
     @Column(name = "serial_number")
     private String serialNumber;
@@ -33,5 +33,12 @@ public class Product extends BaseEntity {
 
     @Column(name = "count")
     private Integer count;
+
+    @ManyToOne
+    @JoinColumn(name = "product_type_id")
+    private ProductType productType;
+
+    @OneToMany(mappedBy = "productId")
+    private List<ProductDetail> productDetails;
 
 }

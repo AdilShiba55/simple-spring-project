@@ -23,22 +23,24 @@ public class ProductService {
     private ProductTypeRepository productTypeRepository;
 
     @Transactional
-    public Long save(ProductDTO productDTO) {
+    public Product save(ProductDTO productDTO) {
         ProductType productType = productTypeRepository.findById(productDTO.getProductTypeId())
                 .orElseThrow(RecordNotFoundException::new);
 
-        Product product = Product.builder()
-                .name(productDTO.getName())
-                .productType(productType)
-                .serialNumber(productDTO.getSerialNumber())
-                .manufacturer(productDTO.getManufacturer())
-                .price(productDTO.getPrice())
-                .count(productDTO.getCount())
-                .build();
-
+        Product product = new Product();
         product.setId(product.getId());
+        product.setName(productDTO.getName());
+        product.setProductType(productType);
+        product.setSerialNumber(productDTO.getSerialNumber());
+        product.setManufacturer(productDTO.getManufacturer());
+        product.setPrice(productDTO.getPrice());
+        product.setCount(productDTO.getCount());
 
-        return productRepository.save(product).getId();
+        return productRepository.save(product);
+    }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public Product findById(Long id) {

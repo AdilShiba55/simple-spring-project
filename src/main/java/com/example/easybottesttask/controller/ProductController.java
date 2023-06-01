@@ -20,7 +20,13 @@ public class ProductController {
 
     @PostMapping
     public Long save(@RequestBody @Valid ProductDTO productDTO) {
-        return productService.save(productDTO);
+        Product product = productService.save(productDTO);
+        return product.getId();
+    }
+
+    @GetMapping
+    public List<Product> all() {
+        return productService.findAll();
     }
 
     @GetMapping("/{id}")
